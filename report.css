@@ -1,0 +1,66 @@
+html, body {
+    background: #131317;
+    color:white;
+    font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+
+    text-shadow: #000 1px 1px;
+}
+
+.node {
+    background: #25262e;
+    margin: 8px;
+    padding: 8px;
+}
+
+.node-name {
+    font-size: 18pt;
+}
+
+.node.data > .node-name {       color: #69985E;}
+.node.data_cold > .node-name {  color: #22b2da;}
+.node.data_warm > .node-name {  color: #f0d43a;}
+.node.data_hot > .node-name {   color: #f23557;}
+
+
+.shard.data_hot {        background: #f23557;}
+.shard.data_warm {       background: #f0d43a;}
+.shard.data_cold {       background: #22b2da;}
+.shard.data_content {    background: #69985E;}
+
+
+
+.shards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    list-style: none;
+}
+
+.shard {
+    width: 32px;
+    margin: 2px;
+    text-align: center;
+    font-weight: bold;
+    background: lightslategray;
+    position:relative;
+}
+
+
+.shard:before {
+    content: attr(data-text);
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    left:100%;
+    margin-left:15px;
+    padding:10px;
+    border-radius:10px;
+    background:#131317;
+    text-align:center;  
+    display:none;
+    z-index: 100;
+  }
+  
+  .shard:hover:before {
+    display:block;
+  }
