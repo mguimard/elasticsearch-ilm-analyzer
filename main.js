@@ -10,7 +10,7 @@ const ES_INSECURE = process.env.ES_INSECURE
 let auth = {}
 
 if(ES_INSECURE) {
-    auth.https = { rejectUnauthorized: true }
+    auth.https = { rejectUnauthorized: false }
 }
 
 if (ES_USERNAME && ES_PASSWORD) {
