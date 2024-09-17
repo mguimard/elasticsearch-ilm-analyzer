@@ -5,8 +5,13 @@ import fs from 'fs'
 const ES_HOST = process.env.ES_HOST || 'http://localhost:9200'
 const ES_USERNAME = process.env.ES_USERNAME
 const ES_PASSWORD = process.env.ES_PASSWORD
+const ES_INSECURE = process.env.ES_INSECURE
 
 let auth = {}
+
+if(ES_INSECURE) {
+    auth.https = { rejectUnauthorized: true }
+}
 
 if (ES_USERNAME && ES_PASSWORD) {
     auth.username = ES_USERNAME
@@ -19,7 +24,8 @@ let paths = {
     shard_list: '/_cat/shards?format=json&h=index,node,state,prirep,docs'
 }
 
-const indices = await got(`${ES_HOST}${paths.index_settings}`, auth).json()
+const cluster = await got(`${ES_HOST}`,  auth).json()
+const indices = await got(`${ES_HOST}${paths.index_settings}`,  auth).json()
 const nodes_data = await got(`${ES_HOST}${paths.nodes_settings}`, auth).json()
 const shards = await got(`${ES_HOST}${paths.shard_list}`, auth).json()
 
@@ -50,5 +56,9 @@ function compareNodes(a, b) {
   
 nodes.sort(compareNodes)
 
-let report = await ejs.renderFile('report.tpl', {nodes})
+const primary_shards_count = shards.filter(s => s.prirep === 'p').length
+
+const unassigned_shards = shards.filter(s => s.node === null)
+
+let report = await ejs.renderFile('report.tpl', {cluster, nodes, primary_shards_count, unassigned_shards})
 await fs.promises.writeFile('report.html', report)
