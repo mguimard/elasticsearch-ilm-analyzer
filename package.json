@@ -12,7 +12,6 @@
   "license": "ISC",
   "dependencies": {
     "ejs": "^3.1.10",
-    "got": "^14.4.2",
-    "html-pdf-node": "^1.0.8"
+    "got": "^14.4.2"
   }
 }
