@@ -9,34 +9,69 @@
 </head>
 <body>
 
+<div class="summary">
+    <span><b>Cluster:</b> <%= cluster.cluster_name %></span>
+    <span><b>Nodes:</b> <%= nodes.length %></span>
+    <span><b>Primary shards:</b> <%= primary_shards_count %></span>
+</div>
+
 <% for(const node of nodes) { %>
 <div class="node <%= node.roles.join(' ')%>">
-    <span class="node-name"><%= node.name %></span>
-    <span class="node-roles"><%= node.roles.join(' ') %></span>
-    <ul class="shards">
-    <% node.shards.forEach(s => { %>
-        <li 
-            class="shard <%= s.tier ? s.tier.join(' ') : '' %>"        
-            data-text="[<%= s.prirep %>] [<%= s.tier %>] (<%= s.docs %>) <%= s.index %>"
-            >
-            <%= s.prirep.toUpperCase() %>
-        </li>
-    <% }) %>    
-    </ul>
+
+    <div class="inline-container">
+        <span class="node-name"><%= node.name %> (<%= node.shards.length %>)</span>
+        
+        <% node.roles.forEach(role => { %>
+            <span class="node-role"><%= role %></span>
+        <% }) %>
+    </div>
+
+    <div class="inline-container">
+        <ul class="shards">
+        <% node.shards.forEach(s => { %>
+            <li 
+                class="shard <%= s.tier ? s.tier.join(' ') : '' %>"        
+                data-text="[<%= s.prirep %>] [<%= s.tier %>] (<%= s.docs %>) <%= s.index %>"
+                >
+                <%= s.prirep.toUpperCase() %>
+            </li>
+        <% }) %>    
+        </ul>
+    </div>
 </div>
 <% } %>
 
+<div class="node">
+ <div class="inline-container">
+        <span class="node-name">Unassigned</span>        
+    </div>
+
+    <div class="inline-container">
+        <ul class="shards">
+        <% unassigned_shards.forEach(s => { %>
+            <li 
+                class="shard <%= s.tier ? s.tier.join(' ') : '' %>"        
+                data-text="[<%= s.prirep %>] [<%= s.tier %>] (<%= s.docs %>) <%= s.index %>"
+                >
+                <%= s.prirep.toUpperCase() %>
+            </li>
+        <% }) %>    
+        </ul>
+    </div>
+</div>
 
 
-<p>Legend<p>
+<div class="legend">
+    <p>Legend<p>
 
-<span class="shard"> Inconnu </span>
-<span class="shard data_cold"> data_cold </span>
-<span class="shard data_warm"> data_warm </span>
-<span class="shard data_hot"> data_hot </span>
-<span class="shard data_content"> data_content </span>
-<p><span class="shard">P</span> primary</p>
-<p><span class="shard">R</span> replica</p>
+    <span class="legend-item"> Unknown </span>
+    <span class="legend-item data_cold"> data_cold </span>
+    <span class="legend-item data_warm"> data_warm </span>
+    <span class="legend-item data_hot"> data_hot </span>
+    <span class="legend-item data_content"> data_content </span>
+    <p><span class="legend-item">P</span> Primary shard</p>
+    <p><span class="legend-item">R</span> Replica</p>
+</div>
 
 </body>
 </html>
